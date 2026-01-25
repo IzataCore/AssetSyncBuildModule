@@ -45,7 +45,7 @@ Antes de começar, certifique-se de ter instalado:
 
 ```bash
 git clone <url-do-repositorio>
-cd plataforma-marketing
+cd AssetSyncBuildModule.git
 ```
 
 2. Instale as dependências:
