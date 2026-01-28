@@ -2,7 +2,7 @@ Ext.define("y.view.customPage.CustomPage", {
   // Ajusta 'MeuTeste' para o nome da tua app em app.json (ex: 'projecto_requerido')
   extend: "Ext.Container",
   //alias: 'widget.main',  // Alias padrão para a view principal
-  cls: 'custompage',
+  cls: "custompage",
   title: "",
   layout: "vbox",
   bodyPadding: 10,
@@ -77,11 +77,10 @@ Ext.define("y.view.customPage.CustomPage", {
     },
     // Grid principal com os dados do PDF (copiei todos os itens da imagem)
     {
-      xtype: 'grid',
+      xtype: "grid",
       flex: 1,
       cls: "custom_header",
-      
-      
+
       minHeight: 400,
       store: {
         fields: [
@@ -92,7 +91,6 @@ Ext.define("y.view.customPage.CustomPage", {
           "si",
           "no",
           "observaciones",
-          "n_inicidencia",
         ],
         data: [
           {
@@ -103,7 +101,6 @@ Ext.define("y.view.customPage.CustomPage", {
             si: "X",
             no: "",
             observaciones: "",
-            n_inicidencia: "",
           },
           {
             periodicidad: "TRIMESTRAL",
@@ -113,16 +110,21 @@ Ext.define("y.view.customPage.CustomPage", {
             si: "X",
             no: "",
             observaciones: "",
-            n_inicidencia: "",
           },
         ],
       },
       columns: [
-        { text: "Periodicidad", dataIndex: "periodicidad", width: 90, borderWidth: 2},
+        {
+          text: "Periodicidad",
+          dataIndex: "periodicidad",
+          width: 90,
+          borderWidth: 2,
+        },
         {
           text: "Fecha_Planificada",
           dataIndex: "fecha_planificada",
           width: 250,
+          tdCls: 'player'
         },
         {
           text: "Fecha Inspección",
@@ -156,11 +158,6 @@ Ext.define("y.view.customPage.CustomPage", {
           },
         },
         { text: "Observaciones", dataIndex: "observaciones", flex: 1 },
-        {
-          text: "Nº Inicidencia",
-          dataIndex: "n_inicidencia",
-          width: 200,
-        },
       ],
     },
   ],

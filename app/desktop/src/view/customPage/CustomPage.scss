@@ -1,0 +1,48 @@
+.x-gridcolumn > .x-header-el  {
+  background-color: #9bc2e6 !important;
+}
+.custom_header .x-grid-view,
+.x-tree-view {
+  background-color: #f9f9f9 !important;
+}
+.custom_header .x-grid-cell-inner {
+  color: #222;
+  background-color: #f9f9f9;
+  border-width: 0px 0px 1px 1px;
+  border-style: solid;
+}
+.custom_header .x-column-header {
+  border-right: 1px solid #000;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  color: #ffff;
+  font:
+    400 14px / 20px "Poppins",
+    sans-serif;
+  outline: 0;
+  background-color: #37507c;
+}
+.custom_header .x-grid-with-row-lines .x-grid-item {
+  border-style: solid;
+  border-width: 1px 0 0;
+  border-color: #222;
+}
+.custom_header .x-grid-item:nth-child(odd) .x-grid-cell {
+  background-color: #f0f8ff !important;
+}
+.custom_header .x-grid-item:nth-child(even) .x-grid-cell {
+  background-color: #ffffff !important;
+}
+.custom_header .x-grid-item:hover .x-grid-cell {
+  background-color: #e6f3ff !important;
+}
+.custom_header .x-form-text-default {
+  color: #f9f9f9;
+  padding: 5px 10px 4px;
+  background-color: #2f75b5;
+  border-radius: 4px;
+  font:
+    400 14px / 21px "Poppins",
+    sans-serif;
+  min-height: 30px;
+}
