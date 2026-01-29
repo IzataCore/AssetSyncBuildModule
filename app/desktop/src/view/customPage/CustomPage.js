@@ -8,6 +8,166 @@ Ext.define("y.view.customPage.CustomPage", {
   bodyPadding: 10,
   scrollable: true,
   xtype: "custompage",
+  requires: ["Ext.Ajax", "Ext.Label", "Ext.field.Select"],
+  initialize: function () {
+    this.callParent(arguments);
+    this.loadZonas();
+  },
+
+  loadZonas: function () {
+    var zonaSelect = this.down("#zonaSelect");
+    if (!zonaSelect) {
+      return;
+    }
+
+    var baseUrl = "/cmdbuild/services/rest/v3";
+    var url =
+      baseUrl +
+      "/classes/Building/cards?onlyGridAttrs=true&page=1&start=0&limit=50" +
+      "&sort=%5B%7B%22property%22%3A%22Code%22%2C%22direction%22%3A%22ASC%22%7D%5D";
+
+    Ext.Ajax.request({
+      url: url,
+      method: "GET",
+      success: function (response) {
+        var json = Ext.decode(response.responseText);
+        var rows = (json && (json.data || json.rows)) || [];
+        var options = rows.map(function (item) {
+          var value = item._id || item.Id || item.id || item.Code || item.code;
+          var text =
+            item.Description ||
+            item.description ||
+            item.Code ||
+            item.code ||
+            value;
+          return { value: value, text: text };
+        });
+
+        zonaSelect.setOptions(options);
+      },
+      failure: function (response) {
+        // Logar para diagnostico local; no OpenMaint pode existir CORS/auth.
+        console.error("Falha ao carregar zonas:", response);
+      },
+    });
+  },
+
+  loadAreas: function (zonaId) {
+    var areaSelect = this.down("#areaSelect");
+    if (!areaSelect) {
+      return;
+    }
+
+    if (!zonaId) {
+      areaSelect.setValue(null);
+      areaSelect.setOptions([]);
+      return;
+    }
+
+    var filter = {
+      relation: [
+        {
+          domain: "BuildingFloor",
+          source: "Building",
+          destination: "Floor",
+          direction: "_2",
+          type: "oneof",
+          cards: [{ className: "Building", id: zonaId }],
+        },
+      ],
+    };
+
+    var baseUrl = "/cmdbuild/services/rest/v3";
+    var url =
+      baseUrl +
+      "/classes/Floor/cards?onlyGridAttrs=true&filter=" +
+      encodeURIComponent(JSON.stringify(filter)) +
+      "&page=1&start=0&limit=50" +
+      "&sort=%5B%7B%22property%22%3A%22Code%22%2C%22direction%22%3A%22ASC%22%7D%5D";
+
+    Ext.Ajax.request({
+      url: url,
+      method: "GET",
+      success: function (response) {
+        var json = Ext.decode(response.responseText);
+        var rows = (json && (json.data || json.rows)) || [];
+        var options = rows.map(function (item) {
+          var value = item._id || item.Id || item.id || item.Code || item.code;
+          var text =
+            item.Description ||
+            item.description ||
+            item.Code ||
+            item.code ||
+            value;
+          return { value: value, text: text };
+        });
+
+        areaSelect.setOptions(options);
+      },
+      failure: function (response) {
+        console.error("Falha ao carregar areas:", response);
+      },
+    });
+  },
+
+  loadSubzonas: function (areaId) {
+    var subzonaSelect = this.down("#subzonaSelect");
+    if (!subzonaSelect) {
+      return;
+    }
+
+    if (!areaId) {
+      subzonaSelect.setValue(null);
+      subzonaSelect.setOptions([]);
+      return;
+    }
+
+    var filter = {
+      relation: [
+        {
+          domain: "FloorUnit",
+          source: "Floor",
+          destination: "Unit",
+          direction: "_2",
+          type: "oneof",
+          cards: [{ className: "Floor", id: areaId }],
+        },
+      ],
+    };
+
+    var baseUrl = "/cmdbuild/services/rest/v3";
+    var url =
+      baseUrl +
+      "/classes/Unit/cards?onlyGridAttrs=true&filter=" +
+      encodeURIComponent(JSON.stringify(filter)) +
+      "&page=1&start=0&limit=50" +
+      "&sort=%5B%7B%22property%22%3A%22Code%22%2C%22direction%22%3A%22ASC%22%7D%5D";
+
+    Ext.Ajax.request({
+      url: url,
+      method: "GET",
+      success: function (response) {
+        var json = Ext.decode(response.responseText);
+        var rows = (json && (json.data || json.rows)) || [];
+        var options = rows.map(function (item) {
+          var value = item._id || item.Id || item.id || item.Code || item.code;
+          var text =
+            item.Description ||
+            item.description ||
+            item.Code ||
+            item.code ||
+            value;
+          return { value: value, text: text };
+        });
+
+        subzonaSelect.setOptions(options);
+      },
+      failure: function (response) {
+        console.error("Falha ao carregar subzonas:", response);
+      },
+    });
+  },
+  requires: ["Ext.Label", "Ext.field.Select"],
 
   items: [
     {
@@ -25,14 +185,60 @@ Ext.define("y.view.customPage.CustomPage", {
       padding: "10 15",
 
       items: [
-        // 🔹 ZONA (esquerda)
+        // 🔹 ZONAS (esquerda)
         {
           xtype: "container",
           flex: 1,
-          style: {
-            fontSize: "14px",
+          layout: { type: "hbox", align: "middle" },
+          defaults: {
+            xtype: "selectfield",
+            width: 130,
+            margin: "0 10 0 0",
           },
-          html: "<b>ZONA:</b> ____________",
+          items: [
+            {
+              itemId: "zonaSelect",
+              placeholder: "Zona",
+              listeners: {
+                change: function (field, newValue) {
+                  var view = field.up("custompage");
+                  if (view && view.loadAreas) {
+                    view.loadAreas(newValue);
+                  }
+                },
+              },
+              options: [
+                { value: "ZONA_A", text: "Zona A" },
+                { value: "ZONA_B", text: "Zona B" },
+                { value: "ZONA_C", text: "Zona C" },
+              ],
+            },
+            {
+              itemId: "areaSelect",
+              placeholder: "Área",
+              listeners: {
+                change: function (field, newValue) {
+                  var view = field.up("custompage");
+                  if (view && view.loadSubzonas) {
+                    view.loadSubzonas(newValue);
+                  }
+                },
+              },
+              options: [
+                { value: "AREA_1", text: "Área 1" },
+                { value: "AREA_2", text: "Área 2" },
+              ],
+            },
+            {
+              itemId: "subzonaSelect",
+              placeholder: "Subzona",
+              margin: 0,
+              options: [
+                { value: "SUB_1", text: "Subárea 1" },
+                { value: "SUB_2", text: "Subárea 2" },
+              ],
+            },
+          ],
         },
 
         // 🔹 TÍTULO (centro)
@@ -56,13 +262,15 @@ Ext.define("y.view.customPage.CustomPage", {
           items: [
             {
               xtype: "image",
-              src: "resources/images/logo1.png",
+              // Trocar pelo logo real quando disponível em /resources/images
+              src: Ext.getResourcePath("desktop/5.jpg"),
               height: 40,
               margin: "0 10 0 0",
             },
             {
               xtype: "image",
-              src: "resources/images/logo2.png",
+              // Trocar pelo logo real quando disponível em /resources/images
+              src: Ext.getResourcePath("desktop/5.jpg"),
               height: 40,
             },
           ],

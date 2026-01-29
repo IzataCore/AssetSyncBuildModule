@@ -104,6 +104,16 @@ module.exports = async function (env) {
         devMiddleware: {
           stats: stats
         },
+        proxy: {
+          '/cmdbuild': {
+            target: 'http://82.223.33.114',
+            changeOrigin: true,
+            secure: false,
+            headers: {
+              Authorization: `Basic ${Buffer.from('admin:demopass@2024').toString('base64')}`
+            }
+          }
+        }
         // inline: !isProd, // this was removed without replacement - https://github.com/webpack/webpack-dev-server/blob/master/migration-v4.md
       }
     }

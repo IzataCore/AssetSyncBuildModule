@@ -97,9 +97,7 @@
 Ext.define("CMDBuildUI.view.custompages.pagina.Pagina", {
   extend: "Ext.panel.Panel",
   alias: "widget.custompages-pagina",
-  requires: ["Ext.field.Select"],
-  // Mixin usado no OpenMaint; manter desativado no ambiente local.
-  // Reativar aqui ao publicar na plataforma.
+  //mixins: ["CMDBuildUI.mixins.CustomPage"],
 
   title: "PLANTILLA FICHAS INSPECCIÓN",
   layout: { type: "vbox", align: "stretch" },
@@ -128,83 +126,50 @@ Ext.define("CMDBuildUI.view.custompages.pagina.Pagina", {
               xtype: "container",
               flex: 1,
               layout: { type: "hbox", align: "middle" },
-              // OpenMaint (classic) - descomente este bloco e comente o modern
-              // defaults: {
-              //   xtype: "combo",
-              //   editable: false,
-              //   width: 130,
-              //   margin: "0 10 0 0",
-              // },
-              // items: [
-              //   {
-              //     emptyText: "Zona",
-              //     store: {
-              //       fields: ["id", "name"],
-              //       data: [
-              //         { id: "ZONA_A", name: "Zona A" },
-              //         { id: "ZONA_B", name: "Zona B" },
-              //         { id: "ZONA_C", name: "Zona C" },
-              //       ],
-              //     },
-              //     displayField: "name",
-              //     valueField: "id",
-              //   },
-              //   {
-              //     emptyText: "Subzona",
-              //     margin: 0,
-              //     store: {
-              //       fields: ["id", "name"],
-              //       data: [
-              //         { id: "SUB_1", name: "Subárea 1" },
-              //         { id: "SUB_2", name: "Subárea 2" },
-              //       ],
-              //     },
-              //     displayField: "name",
-              //     valueField: "id",
-              //   },
-              //   {
-              //     emptyText: "Área",
-              //     store: {
-              //       fields: ["id", "name"],
-              //       data: [
-              //         { id: "AREA_1", name: "Área 1" },
-              //         { id: "AREA_2", name: "Área 2" },
-              //       ],
-              //     },
-              //     displayField: "name",
-              //     valueField: "id",
-              //   },
-              // ],
-
-              // Local (modern) - manter ativo aqui
               defaults: {
-                xtype: "selectfield",
+                xtype: "combo",
+                editable: false,
                 width: 130,
                 margin: "0 10 0 0",
               },
               items: [
                 {
-                  placeholder: "Zona",
-                  options: [
-                    { value: "ZONA_A", text: "Zona A" },
-                    { value: "ZONA_B", text: "Zona B" },
-                    { value: "ZONA_C", text: "Zona C" },
-                  ],
+                  emptyText: "Zona",
+                  store: {
+                    fields: ["id", "name"],
+                    data: [
+                      { id: "ZONA_A", name: "Zona A" },
+                      { id: "ZONA_B", name: "Zona B" },
+                      { id: "ZONA_C", name: "Zona C" },
+                    ],
+                  },
+                  displayField: "name",
+                  valueField: "id",
                 },
                 {
-                  placeholder: "Subzona",
+                  emptyText: "Subzona",
                   margin: 0,
-                  options: [
-                    { value: "SUB_1", text: "Subárea 1" },
-                    { value: "SUB_2", text: "Subárea 2" },
-                  ],
+                  store: {
+                    fields: ["id", "name"],
+                    data: [
+                      { id: "SUB_1", name: "Subárea 1" },
+                      { id: "SUB_2", name: "Subárea 2" },
+                    ],
+                  },
+                  displayField: "name",
+                  valueField: "id",
                 },
                 {
-                  placeholder: "Área",
-                  options: [
-                    { value: "AREA_1", text: "Área 1" },
-                    { value: "AREA_2", text: "Área 2" },
-                  ],
+                  emptyText: "Área",
+                  store: {
+                    fields: ["id", "name"],
+                    data: [
+                      { id: "AREA_1", name: "Área 1" },
+                      { id: "AREA_2", name: "Área 2" },
+                    ],
+                  },
+                  displayField: "name",
+                  valueField: "id",
                 },
               ],
             },
